@@ -210,6 +210,12 @@
       max-width: 96rem;
     }
   }
+  .mt-10 {
+    margin-top: calc(var(--spacing) * 10);
+  }
+  .mt-100 {
+    margin-top: calc(var(--spacing) * 100);
+  }
   .flex {
     display: flex;
   }
@@ -339,6 +345,9 @@
   }
   .py-3 {
     padding-block: calc(var(--spacing) * 3);
+  }
+  .pt-30 {
+    padding-top: calc(var(--spacing) * 30);
   }
   .text-center {
     text-align: center;
