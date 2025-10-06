@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+    /* Fonts */
+    --font-archivo: 'Archivo';
+    
+    /* Colors */
+    --color-bluegreen-100: #cad2c5;
+    --color-bluegreen-200: #84a98c;
+    --color-bluegreen-300: #52796f;
+    --color-bluegreen-400: #354f52;
+    --color-bluegreen-500: #2f3e46;
+    --color-bluegreen-600: #192126;
+
+    --color-kiwi-100: rgb(65, 122, 41);
+    --color-kiwi50-100: rgba(65, 122, 41, 0.5);
+
+    --color-kiwibg: hsla(220,60%,3%,1)
+}
+
+.skibidi {
+    color: red;
+}

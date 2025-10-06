@@ -1,0 +1,23 @@
+{
+  "name": "kiwigods",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx @tailwindcss/cli -i ./assets/styles/input.css -o ./assets/styles/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SoftwareNotion/kiwigods.git"
+  },
+  "author": "SoftwareNotion",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SoftwareNotion/kiwigods/issues"
+  },
+  "homepage": "https://github.com/SoftwareNotion/kiwigods#readme",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.12",
+    "tailwindcss": "^4.1.12"
+  }
+}
