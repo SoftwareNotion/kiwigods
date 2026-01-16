@@ -26,5 +26,5 @@
 }
 
 .animate-fadecycle {
-    animation: fadecycle 7s ease-in-out infinite;
+    animation: fadecycle 7s linear infinite;
 }

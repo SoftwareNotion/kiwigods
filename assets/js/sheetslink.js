@@ -104,7 +104,7 @@
     if (descEl) {
         if (descriptionQuotes.length > 1) {
             let quoteIndex = 0;
-            const cycleMs = 6950;
+            const cycleMs = 7000;
             descEl.textContent = descriptionQuotes[quoteIndex];
             descEl.classList.add("animate-fadecycle");
             const updateQuote = () => {
