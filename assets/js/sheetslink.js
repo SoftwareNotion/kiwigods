@@ -45,6 +45,7 @@
 
     let pfp = "";
     let description = "";
+    let descriptionQuotes = [];
 
     const norm = (s) => s.toLowerCase().replace(/\s+/g, " ").trim();
 
@@ -65,11 +66,18 @@
         if (!description && text.includes("description")) {
             for (let j = i + 1; j < rows.length; j++) {
                 const v = firstNonEmpty(rows[j]);
-                if (v) {
-                    description = v;
-                    break;
-                }
+                if (!v) continue;
+
+                const nv = norm(v);
+                const isProfileHeader = nv.includes("profile") && (nv.includes("pitc") || nv.includes("picture"));
+                const isDescriptionHeader = nv.includes("description");
+
+                if (isProfileHeader || isDescriptionHeader) break;
+
+                descriptionQuotes.push(v);
             }
+
+            description = descriptionQuotes[0] || "";
         }
 
         if (pfp && description) break;
@@ -94,7 +102,21 @@
     }
 
     if (descEl) {
-        descEl.textContent = description || "";
+        if (descriptionQuotes.length > 1) {
+            let quoteIndex = 0;
+            const cycleMs = 6950;
+            descEl.textContent = descriptionQuotes[quoteIndex];
+            descEl.classList.add("animate-fadecycle");
+            const updateQuote = () => {
+                quoteIndex = (quoteIndex + 1) % descriptionQuotes.length;
+                descEl.textContent = descriptionQuotes[quoteIndex];
+            };
+            const scheduleUpdate = () => setTimeout(updateQuote, cycleMs / 2);
+            scheduleUpdate();
+            setInterval(scheduleUpdate, cycleMs);
+        } else {
+            descEl.textContent = description || "";
+        }
     }
 
     if (pfpNoCache) {

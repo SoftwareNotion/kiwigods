@@ -18,6 +18,13 @@
     --color-kiwibg: hsla(220,60%,3%,1)
 }
 
-.skibidi {
-    color: red;
+/* Animations */
+@keyframes fadecycle {
+    0% {opacity: 1;}
+    50% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+.animate-fadecycle {
+    animation: fadecycle 7s ease-in-out infinite;
 }
