@@ -49,8 +49,7 @@
     const isDescriptionHeader = (value) => value.includes("description");
     const isKnownHeader = (value) => isProfileHeader(value) || isDescriptionHeader(value);
 
-    let pfp = "";
-    let undeadBrosPfp = "";
+    const profileImages = [];
     let description = "";
     const descriptionQuotes = [];
 
@@ -66,12 +65,7 @@
                 const normalizedValue = norm(value);
                 if (isKnownHeader(normalizedValue)) break;
 
-                if (!pfp) {
-                    pfp = value;
-                } else if (!undeadBrosPfp) {
-                    undeadBrosPfp = value;
-                }
-                break;
+                profileImages.push(value);
             }
         }
 
@@ -89,8 +83,11 @@
             description = descriptionQuotes[0] || "";
         }
 
-        if (pfp && undeadBrosPfp && description) break;
+        if (profileImages.length >= 2 && description) break;
     }
+
+    const pfp = profileImages[0] || "";
+    const undeadBrosPfp = profileImages[1] || "";
 
     const cacheBust = `cb=${Date.now()}`;
     const pfpNoCache = pfp
