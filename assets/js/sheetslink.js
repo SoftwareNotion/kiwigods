@@ -40,55 +40,68 @@
         rows.push(row);
     }
 
-    const firstNonEmpty = (r) =>
-        (r || []).find((c) => String(c ?? "").trim() !== "")?.trim() || "";
+    const firstNonEmpty = (currentRow) =>
+        (currentRow || []).find((value) => String(value ?? "").trim() !== "")?.trim() || "";
+
+    const norm = (value) => value.toLowerCase().replace(/\s+/g, " ").trim();
+    const isProfileHeader = (value) =>
+        value.includes("profile") && (value.includes("pitc") || value.includes("picture"));
+    const isDescriptionHeader = (value) => value.includes("description");
+    const isKnownHeader = (value) => isProfileHeader(value) || isDescriptionHeader(value);
 
     let pfp = "";
+    let undeadBrosPfp = "";
     let description = "";
-    let descriptionQuotes = [];
-
-    const norm = (s) => s.toLowerCase().replace(/\s+/g, " ").trim();
+    const descriptionQuotes = [];
 
     for (let i = 0; i < rows.length; i++) {
         const text = norm(firstNonEmpty(rows[i]));
         if (!text) continue;
 
-        if (!pfp && text.includes("profile") && (text.includes("pitc") || text.includes("picture"))) {
+        if (isProfileHeader(text)) {
             for (let j = i + 1; j < rows.length; j++) {
-                const v = firstNonEmpty(rows[j]);
-                if (v) {
-                    pfp = v;
-                    break;
+                const value = firstNonEmpty(rows[j]);
+                if (!value) continue;
+
+                const normalizedValue = norm(value);
+                if (isKnownHeader(normalizedValue)) break;
+
+                if (!pfp) {
+                    pfp = value;
+                } else if (!undeadBrosPfp) {
+                    undeadBrosPfp = value;
                 }
+                break;
             }
         }
 
-        if (!description && text.includes("description")) {
+        if (!description && isDescriptionHeader(text)) {
             for (let j = i + 1; j < rows.length; j++) {
-                const v = firstNonEmpty(rows[j]);
-                if (!v) continue;
+                const value = firstNonEmpty(rows[j]);
+                if (!value) continue;
 
-                const nv = norm(v);
-                const isProfileHeader = nv.includes("profile") && (nv.includes("pitc") || nv.includes("picture"));
-                const isDescriptionHeader = nv.includes("description");
+                const normalizedValue = norm(value);
+                if (isKnownHeader(normalizedValue)) break;
 
-                if (isProfileHeader || isDescriptionHeader) break;
-
-                descriptionQuotes.push(v);
+                descriptionQuotes.push(value);
             }
 
             description = descriptionQuotes[0] || "";
         }
 
-        if (pfp && description) break;
+        if (pfp && undeadBrosPfp && description) break;
     }
 
     const cacheBust = `cb=${Date.now()}`;
     const pfpNoCache = pfp
         ? (pfp.includes("?") ? `${pfp}&${cacheBust}` : `${pfp}?${cacheBust}`)
         : "";
+    const undeadBrosPfpNoCache = undeadBrosPfp
+        ? (undeadBrosPfp.includes("?") ? `${undeadBrosPfp}&${cacheBust}` : `${undeadBrosPfp}?${cacheBust}`)
+        : "";
 
     const pfpEl = document.getElementById("linked-pfp");
+    const undeadBrosPfpEl = document.getElementById("linked-ub-pfp");
     const descEl = document.getElementById("linked-description");
 
     if (pfpEl && pfpNoCache) {
@@ -98,6 +111,16 @@
             pfpEl.style.backgroundImage = `url("${pfpNoCache}")`;
             pfpEl.style.backgroundSize = "cover";
             pfpEl.style.backgroundPosition = "center";
+        }
+    }
+
+    if (undeadBrosPfpEl && undeadBrosPfpNoCache) {
+        if (undeadBrosPfpEl.tagName === "IMG") {
+            undeadBrosPfpEl.src = undeadBrosPfpNoCache;
+        } else {
+            undeadBrosPfpEl.style.backgroundImage = `url("${undeadBrosPfpNoCache}")`;
+            undeadBrosPfpEl.style.backgroundSize = "cover";
+            undeadBrosPfpEl.style.backgroundPosition = "center";
         }
     }
 
@@ -134,5 +157,5 @@
     }
 
 
-    return { pfp: pfpNoCache, description };
+    return { pfp: pfpNoCache, undeadBrosPfp: undeadBrosPfpNoCache, description };
 })();
